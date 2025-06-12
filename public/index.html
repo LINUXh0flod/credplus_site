@@ -61,6 +61,14 @@
       color: #222;
     }
 
+    .opcional {
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.3);
+  margin-left: 6px;
+  font-style: italic;
+}
+
     label {
       display: block;
       font-size: 14px;
@@ -127,41 +135,47 @@
   <main>
     <div class="form-wrapper">
       <h2>Informações de Pagamento</h2>
-      <form action="index2.html" method="get">
-        <label for="nome">1. Informe seu nome completo</label>
-        <input type="text" id="nome" name="nome" placeholder="Nome completo" required>
+     <form action="index2.html" method="get">
+  <label for="nome">1. Informe seu nome completo</label>
+  <input type="text" id="nome" name="nome" placeholder="Nome completo" required>
 
-        <label for="nascimento">2. Data de nascimento</label>
-        <input type="date" id="nascimento" name="nascimento" required>
+  <label for="nascimento">2. Data de nascimento</label>
+  <input type="date" id="nascimento" name="nascimento" required>
 
-        <label for="banco">3. Banco utilizado</label>
-        <select id="banco" name="banco" required>
-          <option value="" disabled selected>Clique para selecionar...</option>
-          <option value="Banco do Brasil">Banco do Brasil</option>
-          <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
-          <option value="Bradesco">Bradesco</option>
-          <option value="Itaú">Itaú</option>
-          <option value="Santander">Santander</option>
-          <option value="Nubank">Nubank</option>
-          <option value="Banco Inter">Banco Inter</option>
-          <option value="C6 Bank">C6 Bank</option>
-          <option value="Outros">Outros</option>
-        </select>
+  <label for="banco">3. Banco utilizado</label>
+  <select id="banco" name="banco" required>
+    <option value="" disabled selected>Clique para selecionar...</option>
+    <option value="Banco do Brasil">Banco do Brasil</option>
+    <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
+    <option value="Bradesco">Bradesco</option>
+    <option value="Itaú">Itaú</option>
+    <option value="Santander">Santander</option>
+    <option value="Nubank">Nubank</option>
+    <option value="Banco Inter">Banco Inter</option>
+    <option value="C6 Bank">C6 Bank</option>
+    <option value="Outros">Outros</option>
+  </select>
 
-        <label for="limite-atual">4. Limite atual dos cartões</label>
-        <select id="limite-atual" name="limite-atual" required>
-          <option value="" disabled selected>Clique para selecionar...</option>
-          <option value="0-500">Até R$500</option>
-          <option value="500-1000">De R$500 a R$1.000</option>
-          <option value="1000-2000">De R$1.000 a R$2.000</option>
-          <option value="2000+">Acima de R$2.000</option>
-        </select>
+  <label for="limite-atual">
+    4. Limite atual dos cartões
+    <span class="opcional">(Opcional)</span>
+  </label>
+  <select id="limite-atual" name="limite-atual">
+    <option value="" disabled selected>Clique para selecionar...</option>
+    <option value="0-500">Até R$500</option>
+    <option value="500-1000">De R$500 a R$1.000</option>
+    <option value="1000-2000">De R$1.000 a R$2.000</option>
+    <option value="2000+">Acima de R$2.000</option>
+  </select>
 
-        <label for="limite-desejado">5. Qual o valor do limite desejado</label>
-        <input type="text" id="limite-desejado" name="limite-desejado" placeholder="Ex: R$ 5.000" required>
+  <label for="limite-desejado">
+    5. Qual o valor do limite desejado
+    <span class="opcional">(Opcional)</span>
+  </label>
+  <input type="text" id="limite-desejado" name="limite-desejado" placeholder="Ex: R$ 5.000">
 
-        <button type="submit">Avançar para Negociação</button>
-      </form>
+  <button type="submit">Avançar para Negociação</button>
+</form>
     </div>
   </main>
 
